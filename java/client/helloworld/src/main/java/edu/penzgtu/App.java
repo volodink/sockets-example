@@ -1,9 +1,8 @@
 package edu.penzgtu;
+
 import java.io.*;
 import java.net.*;
-/**
- * Hello world!
- */
+
 public class App {
     public static void main(String[] args) {
         String hostname = "localhost";
@@ -11,7 +10,9 @@ public class App {
 
         try (Socket socket = new Socket(hostname, port)) {
             // Read the message from the server
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream())
+            );
             String message = in.readLine();
             System.out.println("Received from server: " + message);
         } catch (UnknownHostException ex) {
