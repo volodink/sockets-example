@@ -11,8 +11,6 @@ int main(int argc, char **argv)
     struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
-    char buffer[1024] = {0};
-    const char *hello = "Hello from server";
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
@@ -21,12 +19,17 @@ int main(int argc, char **argv)
     address.sin_port = htons(12345);
 
     bind(server_fd, (struct sockaddr *)&address, sizeof(address));
-    listen(server_fd, 3);
-    new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
-    send(new_socket, hello, strlen(hello), 0);
-    std::cout << "Hello message sent\n";
+    
+    const char *hello = "Hello from server";
 
-    close(new_socket);
+    while (1) {
+        listen(server_fd, 3);
+        new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
+        send(new_socket, hello, strlen(hello), 0);
+        std::cout << "Hello message sent\n";
+        close(new_socket);
+    }
+
     close(server_fd);
     return 0;
 }
